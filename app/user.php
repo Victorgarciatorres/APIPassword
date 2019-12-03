@@ -4,7 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class user extends Model
+class User extends Model
 {
-    //
+    protected $table = 'users';
+    protected $fillable = ['name', 'email', 'password'];
+
+    public function categories()
+    {
+    	return $this->hasMany('App\user', 'user_id');
+    }
+
+
+
 }
