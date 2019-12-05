@@ -25,8 +25,7 @@ class checkAuth
             $token_header = $request->header('Authorization');
             $token = new Token();
             $data = $token->decode($token_header);
-
-            //$request->header('Authorization') = $data;
+    
             $request->request->add(['data_token' => $data]);
 
             return $next($request);

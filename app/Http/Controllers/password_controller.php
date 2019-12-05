@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
+use App\Password;
 
 class password_controller extends Controller
 {
@@ -34,7 +36,14 @@ class password_controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category_name = $request->category_id;
+        $category = Category::where('name', $category_name)->first();
+        
+        $password = new Password();
+        $password->add_password($request, $category);
+        return response()->json([
+            "message" => "nueva contraseña"
+        ], 200);
     }
 
     /**
@@ -66,9 +75,15 @@ class password_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $password_name = $request->old_title;
+        $password = Password::where('title', $password_name)->first();
+
+        $password->title = $request->new_title;
+        $password->password = $request->new_password;
+    
+        $password->update();
     }
 
     /**

@@ -18,4 +18,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 });
 
-Route::apiResource('users', 'user_controller');
+
+
+
+Route::post('store', 'user_controller@store');
+Route::post('login', 'user_controller@login');
+
+Route::group(['middleware'  => ['auth']], function()  
+{
+	Route::apiResource('users', 'user_controller');
+	Route::apiResource('categories', 'category_controller');
+	Route::apiResource('passwords', 'password_controller');
+});
+
+

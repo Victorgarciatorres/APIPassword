@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
+use App\User;
+use App\Helper\Token;
 
 class category_controller extends Controller
 {
@@ -34,7 +37,14 @@ class category_controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $email = $request->data_token->email;
+        $user = User::where('email', $email)->first();
+        
+        $category = new Category();
+        $category->add_category($request, $user);
+        return response()->json([
+            "message" => "nueva categoria"
+        ], 200);
     }
 
     /**
@@ -45,7 +55,7 @@ class category_controller extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -66,9 +76,14 @@ class category_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $category_name = $request->old_name;
+        $category = Category::where('name', $category_name)->first();
+
+        $category->name = $request->new_name;
+    
+        $category->update();
     }
 
     /**
@@ -77,8 +92,12 @@ class category_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
-    }
+        $category_name = $request->category_name;
+        $category = Category::where('name', $category_name)->first();
+        //var_dump($user);exit;
+
+        $category->delete();   
+        }
 }
