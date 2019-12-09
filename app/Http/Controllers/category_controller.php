@@ -53,11 +53,13 @@ class category_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        
-    }
+        $user = User::where('email',$request->data_token->email)->first();
+        $categories = Category::where('user_id',$user->id)->get();
+        return response()->json([ "Categories" => $categories]);
 
+    }
     /**
      * Show the form for editing the specified resource.
      *

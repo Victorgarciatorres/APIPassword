@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Helper\Token;
+use App\Password;
 use App\Category;
 
 class user_controller extends Controller
@@ -61,14 +62,23 @@ class user_controller extends Controller
     public function show(Request $request)
     {
         $email = $request->data_token->email;
-
         $user = User::where('email', $email)->first();
-        $category = Category::where('user_id', $user->id)->get();
+        $passwords = array();
+
+        $categories = Category::where('user_id', $user->id)->get();
+        foreach ($categories as $key => $category) {
+            $password = Password::where('category_id', $category->id)->get();
+            array_push($passwords, $password);
+        }
 
         return response()->json([
             "User" => $user,
-            "Categories" => $category
+            "Categories" => $category,
+            "Password" => $passwords
             ], 201);
+
+
+
     }
 
     /**
@@ -140,12 +150,5 @@ class user_controller extends Controller
         return response()->json([
             "message" => "Unauthorized"
         ], 401);
-
     }
-
-
-
-
-
-
 }

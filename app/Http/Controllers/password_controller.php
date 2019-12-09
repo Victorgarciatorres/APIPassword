@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Password;
+use App\User;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class password_controller extends Controller
 {
@@ -52,9 +54,17 @@ class password_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+       $user = User::where('email',$request->data_token->email)->first();
+       $passwords = array();
+       $categories = Category::where('user_id',$user->id)->get();
+
+           foreach ($categories as $key => $category) {
+               $password = Password::where('category_id',$category->id)->get();
+               array_push($passwords,$password);
+           }
+            return response()->json([ "Passwords" => $passwords]);
     }
 
     /**
@@ -92,8 +102,11 @@ class password_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $password_title = $request->password_title;
+        $password = Password::where('title', $password_title)->first();
+
+        $password->delete();  
     }
 }
