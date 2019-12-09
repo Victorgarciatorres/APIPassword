@@ -73,7 +73,7 @@ class user_controller extends Controller
 
         return response()->json([
             "User" => $user,
-            "Categories" => $category,
+            "Categories" => $categories,
             "Password" => $passwords
             ], 201);
 

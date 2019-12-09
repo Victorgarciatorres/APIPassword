@@ -30,8 +30,6 @@ class checkAuth
 
             return $next($request);
         }
-        
-        var_dump('no tienes permisos'); exit;
-
+        var_dump('no tienes permisos');exit;
     }
 }

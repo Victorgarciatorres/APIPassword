@@ -38,13 +38,13 @@ class password_controller extends Controller
      */
     public function store(Request $request)
     {
-        $category_name = $request->category_id;
-        $category = Category::where('name', $category_name)->first();
         
+        $category_name = $request->category_name;
+        $category = Category::where('name', $category_name)->first();
         $password = new Password();
         $password->add_password($request, $category);
         return response()->json([
-            "message" => "nueva contraseña"
+            'message' => 'nueva password'
         ], 200);
     }
 
